@@ -20,12 +20,16 @@ private:
     double      roomService; // Extra charges
     bool        isActive;
 
-    static inline int nextBookingId = 5001;   // FIX: inline (no linker error)
+    // FIX: function-local static (no linker error, works on old compilers)
+    static int nextBookingId() {
+        static int id = 5001;
+        return id++;
+    }
     static constexpr double TAX_RATE = 0.10;  // FIX: no magic number
 
 public:
     Booking(const Guest& g, Room* r, std::string checkIn, std::string checkOut, int days)
-        : bookingId(nextBookingId++), guest(g), room(r),
+        : bookingId(nextBookingId()), guest(g), room(r),
           checkInDate(std::move(checkIn)), checkOutDate(std::move(checkOut)),
           days(days), roomService(0), isActive(true) {}
 

@@ -13,16 +13,20 @@ private:
     std::string phone;
     std::string address;
 
-    // FIX: "inline" lets the definition live in the header safely.
+    // FIX: function-local static = one shared counter, safe in a header,
+    // works on every C++11+ compiler.
     // (Before: `int Guest::nextId = 1001;` in the header -> linker
     //  "multiple definition" as soon as 2 .cpp files included it.)
-    static inline int nextId = 1001;
+    static int nextId() {
+        static int id = 1001;
+        return id++;
+    }
 
 public:
     Guest() : guestId(0), name(""), phone(""), address("") {}
 
     Guest(std::string name, std::string phone, std::string address)
-        : guestId(nextId++), name(std::move(name)),
+        : guestId(nextId()), name(std::move(name)),
           phone(std::move(phone)), address(std::move(address)) {}
 
     int         getGuestId() const { return guestId; }

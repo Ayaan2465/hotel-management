@@ -5,9 +5,11 @@
 
 // Room type names in one place (instead of "Single Room" typed in many files)
 namespace RoomTypes {
-    inline const std::string SINGLE = "Single Room";
-    inline const std::string DOUBLE = "Double Room";
-    inline const std::string SUITE  = "Suite";
+    // constexpr at namespace scope has internal linkage -> safe in a header
+    // (works on old compilers too, no C++17 "inline variable" needed)
+    constexpr const char* SINGLE = "Single Room";
+    constexpr const char* DOUBLE = "Double Room";
+    constexpr const char* SUITE  = "Suite";
 }
 
 // ============================================================
